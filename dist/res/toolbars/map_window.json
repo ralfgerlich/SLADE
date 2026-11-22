@@ -22,6 +22,11 @@
 
     { "type": "separator" },
 
+    // Lines Mode
+    { "type": "action", "id": "mapw_build_stairs" },
+
+    { "type": "separator" },
+
     // Sectors Mode
     { "type": "action", "id": "mapw_sectormode_normal" },
     { "type": "action", "id": "mapw_sectormode_floor" },
@@ -83,6 +88,10 @@
     {
       "name": "edit_2d",
       "item_ids": [ "mapw_draw_lines", "mapw_draw_shape", "mapw_edit_objects", "mapw_mirror_x", "mapw_mirror_y" ]
+    },
+    {
+      "name": "lines_mode",
+      "item_ids": [ "mapw_build_stairs" ]
     },
     {
       "name": "sectors_mode",

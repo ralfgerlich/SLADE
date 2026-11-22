@@ -58,6 +58,7 @@
 #include "SLADEMap/MapObjectList/SectorList.h"
 #include "SLADEMap/MapSpecials/MapSpecials.h"
 #include "SLADEMap/SLADEMap.h"
+#include "StairBuilder.h"
 #include "UI/UI.h"
 
 using namespace slade;
@@ -352,6 +353,12 @@ bool Input::mouseDown(MouseButton button, int x, int y, bool double_click)
 			context_->tagSectorAt(mouse_pos_map_);
 		}
 
+		else if (mouse_state_ == MouseState::StairBuilding)
+		{
+			context_->stairBuilder().end();
+			mouse_state_ = MouseState::Normal;
+		}
+
 		else if (mouse_state_ == MouseState::Normal)
 		{
 			// Double click to edit the current selection
@@ -408,6 +415,12 @@ bool Input::mouseDown(MouseButton button, int x, int y, bool double_click)
 				context_->lineDraw().end(false);
 				context_->lineDraw().setState(LineDraw::State::ShapeOrigin);
 			}
+		}
+
+		else if (mouse_state_ == MouseState::StairBuilding)
+		{
+			context_->stairBuilder().end(false);
+			mouse_state_ = MouseState::Normal;
 		}
 
 		// Normal state
@@ -854,6 +867,24 @@ void Input::handleKeyBind2d(string_view name)
 			context_->setCursor(ui::MouseCursor::Normal);
 		}
 	}
+	// --- Stair Building ---
+	if (mouse_state_ == MouseState::StairBuilding)
+	{
+		// Accept stair
+		if (name == "map_edit_accept")
+		{
+			mouse_state_ = MouseState::Normal;
+			context_->stairBuilder().end();
+		}
+
+		// Cancel line draw
+		else if (name == "map_edit_cancel")
+		{
+			mouse_state_ = MouseState::Normal;
+			context_->stairBuilder().end(false);
+			mapeditor::window()->showShapeDrawPanel(false);
+		}
+	}
 
 	// --- Normal mouse state ---
 	else if (mouse_state_ == MouseState::Normal)
@@ -926,6 +957,10 @@ void Input::handleKeyBind2d(string_view name)
 		// Begin shape drawing
 		else if (name == "me2d_begin_shapedraw")
 			context_->lineDraw().begin(true);
+		
+		// Begin stair building
+		else if (name == "me2d_begin_stairs")
+			context_->stairBuilder().begin();
 
 		// Create object
 		else if (name == "me2d_create_object")

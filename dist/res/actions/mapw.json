@@ -160,6 +160,12 @@
     "help_text": "Begin shape drawing",
     "shortcut": "kb:me2d_begin_shapedraw"
   },
+  "mapw_build_stairs": {
+    "text": "Build Stairs",
+    "icon": "stairs",
+    "help_text": "Begin stair building",
+    "shortcut": "kb:me2d_begin_stairs"
+  },
   "mapw_edit_objects": {
     "text": "Edit Object(s)",
     "icon": "objectedit",

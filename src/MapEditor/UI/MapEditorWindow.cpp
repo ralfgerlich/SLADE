@@ -177,6 +177,7 @@ void MapEditorWindow::setupMenu()
 	menu_editor->AppendSeparator();
 	SAction::fromId("mapw_draw_lines")->addToMenu(menu_editor);
 	SAction::fromId("mapw_draw_shape")->addToMenu(menu_editor);
+	SAction::fromId("mapw_build_stairs")->addToMenu(menu_editor);
 	SAction::fromId("mapw_edit_objects")->addToMenu(menu_editor);
 	SAction::fromId("mapw_mirror_x")->addToMenu(menu_editor);
 	SAction::fromId("mapw_mirror_y")->addToMenu(menu_editor);
@@ -273,6 +274,7 @@ void MapEditorWindow::setupLayout()
 
 	// Init toolbar state
 	SAction::fromId("mapw_mode_lines")->setChecked(); // Lines mode by default
+	toolbar_->showGroup("lines_mode", true);
 	toolbar_->showGroup("sectors_mode", false);
 	toolbar_->showGroup("display_3d", false);
 

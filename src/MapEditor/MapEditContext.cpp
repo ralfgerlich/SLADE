@@ -40,6 +40,7 @@
 #include "Edit/LineDraw.h"
 #include "Edit/MoveObjects.h"
 #include "Edit/ObjectEdit.h"
+#include "Edit/StairBuilder.h"
 #include "Game/ActionSpecial.h"
 #include "Game/Configuration.h"
 #include "Game/Game.h"
@@ -336,16 +337,17 @@ MapEditContext::MapEditContext() :
 	edit_mode_prev_{ Mode::Lines },
 	sector_mode_{ SectorMode::Both }
 {
-	map_          = std::make_unique<SLADEMap>();
-	undo_manager_ = std::make_unique<UndoManager>(map_.get());
-	selection_    = std::make_unique<ItemSelection>(this);
-	renderer_     = std::make_unique<Renderer>(*this);
-	edit_2d_      = std::make_unique<Edit2D>(*this);
-	edit_3d_      = std::make_unique<Edit3D>(*this);
-	input_        = std::make_unique<Input>(*this);
-	line_draw_    = std::make_unique<LineDraw>(*this);
-	move_objects_ = std::make_unique<MoveObjects>(*this);
-	object_edit_  = std::make_unique<ObjectEdit>(*this);
+	map_            = std::make_unique<SLADEMap>();
+	undo_manager_   = std::make_unique<UndoManager>(map_.get());
+	selection_      = std::make_unique<ItemSelection>(this);
+	renderer_       = std::make_unique<Renderer>(*this);
+	edit_2d_        = std::make_unique<Edit2D>(*this);
+	edit_3d_        = std::make_unique<Edit3D>(*this);
+	input_          = std::make_unique<Input>(*this);
+	line_draw_      = std::make_unique<LineDraw>(*this);
+	move_objects_   = std::make_unique<MoveObjects>(*this);
+	object_edit_    = std::make_unique<ObjectEdit>(*this);
+	stair_builder_  = std::make_unique<StairBuilder>(*this);
 
 	// Info Overlays
 	info_vertex_ = std::make_unique<VertexInfoOverlay>();
@@ -1648,6 +1650,7 @@ void MapEditContext::updateStatusText() const
 void MapEditContext::updateToolbar() const
 {
 	// Show/hide relevant toolbar groups
+	window()->showToolbarGroup("lines_mode", edit_mode_ == Mode::Lines);
 	window()->showToolbarGroup("sectors_mode", edit_mode_ == Mode::Sectors);
 	window()->showToolbarGroup("display_2d", edit_mode_ != Mode::Visual);
 	window()->showToolbarGroup("edit_2d", edit_mode_ != Mode::Visual);
@@ -2267,6 +2270,13 @@ bool MapEditContext::handleAction(string_view id)
 	else if (id == "mapw_draw_shape" && mouse_state == Input::MouseState::Normal)
 	{
 		line_draw_->begin(true);
+		return true;
+	}
+
+	// Begin stair building
+	else if (id == "mapw_build_stairs" && mouse_state == Input::MouseState::Normal)
+	{
+		stair_builder_->begin();
 		return true;
 	}
 

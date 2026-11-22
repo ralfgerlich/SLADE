@@ -502,6 +502,9 @@
     "stop": {
       "svg": "icons/general/stop.svg"
     },
+    "stairs": {
+      "svg": "icons/general/stairs.svg"
+    },
     "swap": {
       "svg_light": "icons/general/swap.svg",
       "svg_dark": "icons/general/dark/swap.svg"

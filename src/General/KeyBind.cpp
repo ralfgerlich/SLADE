@@ -672,6 +672,7 @@ void KeyBind::initBinds()
 	addBind("me2d_lock_hilight", Keypress("H", KPM_CTRL), "Lock/unlock highlight", group);
 	addBind("me2d_begin_linedraw", Keypress("space"), "Begin line drawing", group);
 	addBind("me2d_begin_shapedraw", Keypress("space", KPM_SHIFT), "Begin shape drawing", group);
+	addBind("me2d_begin_stairs", Keypress("space", KPM_CTRL | KPM_SHIFT), "Begin stair building", group);
 	addBind("me2d_create_object", Keypress("insert"), "Create object", group);
 	addBind("me2d_delete_object", Keypress("delete"), "Delete object", group);
 	addBind("me2d_copy_properties", Keypress("C", KPM_CTRL | KPM_SHIFT), "Copy object properties", group);

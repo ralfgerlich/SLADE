@@ -41,6 +41,7 @@ namespace mapeditor
 	class LineDraw;
 	class MoveObjects;
 	class ObjectEdit;
+	class StairBuilder;
 	class Renderer;
 	enum class Mode;
 	enum class SectorMode;
@@ -120,6 +121,7 @@ public:
 	MoveObjects& moveObjects() const { return *move_objects_; }
 	LineDraw&    lineDraw() const { return *line_draw_; }
 	ObjectEdit&  objectEdit() const { return *object_edit_; }
+	StairBuilder& stairBuilder() const { return *stair_builder_; }
 	Edit3D&      edit3D() const { return *edit_3d_; }
 	Edit2D&      edit2D() const { return *edit_2d_; }
 
@@ -228,11 +230,12 @@ private:
 	vector<MapThing*> pathed_things_;
 
 	// Editing
-	unique_ptr<MoveObjects> move_objects_;
-	unique_ptr<LineDraw>    line_draw_;
-	unique_ptr<Edit2D>      edit_2d_;
-	unique_ptr<Edit3D>      edit_3d_;
-	unique_ptr<ObjectEdit>  object_edit_;
+	unique_ptr<MoveObjects>  move_objects_;
+	unique_ptr<LineDraw>     line_draw_;
+	unique_ptr<Edit2D>       edit_2d_;
+	unique_ptr<Edit3D>       edit_3d_;
+	unique_ptr<ObjectEdit>   object_edit_;
+	unique_ptr<StairBuilder> stair_builder_;
 
 	// Object properties and copy/paste
 	unique_ptr<MapThing>  copy_thing_;
