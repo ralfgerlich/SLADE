@@ -267,6 +267,9 @@
     "linedraw": {
       "svg": "icons/general/linedraw.svg"
     },
+    "linesplit_reg": {
+      "svg": "icons/general/linesplit_reg.svg"
+    },
     "lines": {
       "svg": "icons/general/lines.svg"
     },

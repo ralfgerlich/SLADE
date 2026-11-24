@@ -22,5 +22,11 @@
     "text":      "Flip Line",
     "help_text": "Flip the currently selected of hilighted line(s)",
     "shortcut":  "kb:me2d_line_flip"
+  },
+  "mapw_split_line_reg":           {
+    "text":      "Split Line(s) regular",
+    "help_text": "Split line(s) at regular intervals",
+    "icon":      "linesplit_reg",
+    "shortcut":  "kb:me2d_split_line_reg"
   }
 }

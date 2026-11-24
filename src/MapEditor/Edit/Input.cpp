@@ -39,6 +39,7 @@
 #include "General/KeyBind.h"
 #include "General/SAction.h"
 #include "LineDraw.h"
+#include "LineSplit.h"
 #include "MapEditor/ItemSelection.h"
 #include "MapEditor/MapEditContext.h"
 #include "MapEditor/MapEditor.h"
@@ -758,6 +759,36 @@ void Input::handleKeyBind2d(string_view name)
 			mapeditor::window()->showShapeDrawPanel(false);
 		}
 	}
+	
+	// --- Line Splitting ---
+	else if (mouse_state_ == MouseState::LineSplit)
+	{
+		// Accept line draw
+		if (name == "map_edit_accept")
+		{
+			mouse_state_ = MouseState::Normal;
+			context_->lineSplit().end();
+		}
+
+		// Cancel line draw
+		else if (name == "map_edit_cancel")
+		{
+			mouse_state_ = MouseState::Normal;
+			context_->lineSplit().end(false);
+		}
+
+		// Increase line split count
+		else if (name == "me2d_split_reg_inc")
+		{
+			context_->lineSplit().change_splits(1);
+		}
+
+		// Decrease line split count
+		else if (name == "me2d_split_reg_dec")
+		{
+			context_->lineSplit().change_splits(-1);
+		}
+	}
 
 	// --- Paste ---
 	else if (mouse_state_ == MouseState::Paste)
@@ -921,6 +952,10 @@ void Input::handleKeyBind2d(string_view name)
 		else if (name == "me2d_split_line")
 			context_->edit2D().splitLine(
 				mouse_pos_map_.x, mouse_pos_map_.y, 16 / context_->renderer().view().scale().x);
+
+		// Begin regular line splitting
+		else if (name == "me2d_split_line_reg")
+			context_->lineSplit().begin();
 
 		// Begin line drawing
 		else if (name == "me2d_begin_linedraw")

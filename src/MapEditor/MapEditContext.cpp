@@ -39,6 +39,7 @@
 #include "Edit/Edit3D.h"
 #include "Edit/Input.h"
 #include "Edit/LineDraw.h"
+#include "Edit/LineSplit.h"
 #include "Edit/MoveObjects.h"
 #include "Edit/ObjectEdit.h"
 #include "Game/ActionSpecial.h"
@@ -156,6 +157,7 @@ void populateContextMenu2D(wxMenu& menu, Mode edit_mode, const ItemSelection& se
 			SAction::fromId("mapw_line_changespecial")->addToMenu(&menu, true);
 			SAction::fromId("mapw_line_tagedit")->addToMenu(&menu, true);
 			SAction::fromId("mapw_line_flip")->addToMenu(&menu, true);
+			SAction::fromId("mapw_split_line_reg")->addToMenu(&menu, true);
 			SAction::fromId("mapw_line_correctsectors")->addToMenu(&menu, true);
 		}
 	}
@@ -344,6 +346,7 @@ MapEditContext::MapEditContext() :
 	edit_3d_      = std::make_unique<Edit3D>(*this);
 	input_        = std::make_unique<Input>(*this);
 	line_draw_    = std::make_unique<LineDraw>(*this);
+	line_split_   = std::make_unique<LineSplit>(*this);
 	move_objects_ = std::make_unique<MoveObjects>(*this);
 	object_edit_  = std::make_unique<ObjectEdit>(*this);
 
@@ -2262,6 +2265,13 @@ bool MapEditContext::handleAction(string_view id)
 	else if (id == "mapw_draw_lines" && mouse_state == Input::MouseState::Normal)
 	{
 		line_draw_->begin();
+		return true;
+	}
+
+	// Begin line splitting
+	else if (id == "mapw_split_line_reg" && mouse_state == Input::MouseState::Normal)
+	{
+		line_split_->begin();
 		return true;
 	}
 

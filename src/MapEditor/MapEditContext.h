@@ -39,6 +39,7 @@ namespace mapeditor
 	class Input;
 	class ItemSelection;
 	class LineDraw;
+	class LineSplit;
 	class MoveObjects;
 	class ObjectEdit;
 	class Renderer;
@@ -119,6 +120,7 @@ public:
 	// Editing handlers
 	MoveObjects& moveObjects() const { return *move_objects_; }
 	LineDraw&    lineDraw() const { return *line_draw_; }
+	LineSplit&   lineSplit() const { return *line_split_; }
 	ObjectEdit&  objectEdit() const { return *object_edit_; }
 	Edit3D&      edit3D() const { return *edit_3d_; }
 	Edit2D&      edit2D() const { return *edit_2d_; }
@@ -230,6 +232,7 @@ private:
 	// Editing
 	unique_ptr<MoveObjects> move_objects_;
 	unique_ptr<LineDraw>    line_draw_;
+	unique_ptr<LineSplit>   line_split_;
 	unique_ptr<Edit2D>      edit_2d_;
 	unique_ptr<Edit3D>      edit_3d_;
 	unique_ptr<ObjectEdit>  object_edit_;

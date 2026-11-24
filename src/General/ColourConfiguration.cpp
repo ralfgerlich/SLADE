@@ -396,6 +396,7 @@ bool colourconfig::init()
 		{ "thing_path", "Pathed Thing Line", "2D Mode Map" },
 		{ "thing_path_dragon", "Pathed Thing Line (Dragon)", "2D Mode Map" },
 		{ "linedraw", "Line Drawing", "2D Mode Map" },
+		{ "linesplit", "Line Splitting", "2D Mode Map" },
 		{ "moving", "Moving Item(s)", "2D Mode Map" },
 		{ "object_edit", "Object Edit", "2D Mode Map" },
 		{ "selbox_fill", "Selection Box Fill", "2D Mode Interface" },
@@ -496,6 +497,7 @@ void colourconfig::loadDefaultConfiguration(Group group, vector<Colour>& colours
 		colours[ID(MapEditor::ThingPath)].set(34, 255, 255);
 		colours[ID(MapEditor::ThingPathDragon)].set(255, 34, 34);
 		colours[ID(MapEditor::LineDraw)].set(0, 150, 50);
+		colours[ID(MapEditor::LineSplit)].set(0, 150, 50);
 		colours[ID(MapEditor::Moving)].set(255, 100, 0, 255, true);
 		colours[ID(MapEditor::ObjectEdit)].set(220, 140, 0, 170, true);
 		colours[ID(MapEditor::SelBoxFill)].set(0, 100, 255, 100, true);

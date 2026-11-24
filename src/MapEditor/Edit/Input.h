@@ -27,7 +27,8 @@ public:
 		Paste,
 		TagSectors,
 		TagThings,
-		MouseLook
+		MouseLook,
+		LineSplit
 	};
 
 	enum class DragType

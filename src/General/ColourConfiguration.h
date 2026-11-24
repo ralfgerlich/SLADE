@@ -50,6 +50,7 @@ enum class MapEditor
 	ThingPath,
 	ThingPathDragon,
 	LineDraw,
+	LineSplit,
 	Moving,
 	ObjectEdit,
 	SelBoxFill,

@@ -669,6 +669,9 @@ void KeyBind::initBinds()
 	addBind("me2d_mode_3d_at_mouse", Keypress("Q", KPM_SHIFT), "Enter 3d mode at the mouse cursor position", group);
 	addBind("me2d_flat_type", Keypress("F", KPM_CTRL), "Cycle flat type", group);
 	addBind("me2d_split_line", Keypress("S", KPM_SHIFT), "Split nearest line", group);
+	addBind("me2d_split_line_reg", Keypress("S", KPM_CTRL | KPM_ALT), "Split line(s) at regular intervals", group);
+	addBind("me2d_split_reg_inc", Keypress("mwheelup", KPM_CTRL), "Increase number of splits", group);
+	addBind("me2d_split_reg_dec", Keypress("mwheeldown", KPM_CTRL), "Increase number of splits", group);
 	addBind("me2d_lock_hilight", Keypress("H", KPM_CTRL), "Lock/unlock highlight", group);
 	addBind("me2d_begin_linedraw", Keypress("space"), "Begin line drawing", group);
 	addBind("me2d_begin_shapedraw", Keypress("space", KPM_SHIFT), "Begin shape drawing", group);
@@ -686,7 +689,6 @@ void KeyBind::initBinds()
 	group = "Map Editor 2D Lines Mode";
 	addBind("me2d_line_change_texture", Keypress("T", KPM_CTRL), "Change texture(s)", group);
 	addBind("me2d_line_flip", Keypress("F"), "Flip line(s)", group);
-	addBind("me2d_line_flip_nosides", Keypress("F", KPM_SHIFT), "Flip line(s) but not sides", group);
 	addBind("me2d_line_tag_edit", Keypress("T", KPM_SHIFT), "Begin tag edit", group);
 
 	// Map Editor 2D Sectors mode (me2d_sector*)
