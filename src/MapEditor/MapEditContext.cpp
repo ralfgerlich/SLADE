@@ -40,6 +40,7 @@
 #include "Edit/Input.h"
 #include "Edit/LineDraw.h"
 #include "Edit/LineSplit.h"
+#include "Edit/LineSplitController.h"
 #include "Edit/MoveObjects.h"
 #include "Edit/ObjectEdit.h"
 #include "Game/ActionSpecial.h"
@@ -349,6 +350,9 @@ MapEditContext::MapEditContext() :
 	line_split_   = std::make_unique<LineSplit>(*this);
 	move_objects_ = std::make_unique<MoveObjects>(*this);
 	object_edit_  = std::make_unique<ObjectEdit>(*this);
+
+	// Controllers
+	line_split_controller_ = std::make_unique<LineSplitController>(*this);
 
 	// Info Overlays
 	info_vertex_ = std::make_unique<VertexInfoOverlay>();
@@ -2271,7 +2275,7 @@ bool MapEditContext::handleAction(string_view id)
 	// Begin line splitting
 	else if (id == "mapw_split_line_reg" && mouse_state == Input::MouseState::Normal)
 	{
-		line_split_->begin();
+		line_split_controller_->begin();
 		return true;
 	}
 
