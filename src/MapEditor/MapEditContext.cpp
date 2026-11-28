@@ -54,6 +54,7 @@
 #include "ItemSelection.h"
 #include "MapChecks.h"
 #include "MapEditor.h"
+#include "MapEditor/Renderer/2D/LineSplitView.h"
 #include "MapEditor/Renderer/Overlays/InfoOverlay3d.h"
 #include "MapEditor/Renderer/Overlays/LineTextureOverlay.h"
 #include "MapEditor/Renderer/Overlays/QuickTextureOverlay3d.h"

@@ -32,9 +32,6 @@
 // -----------------------------------------------------------------------------
 #include "Main.h"
 #include "LineSplit.h"
-#include "Input.h"
-#include "General/KeyBind.h"
-#include "MapEditor/ItemSelection.h"
 #include "MapEditor/MapEditContext.h"
 #include "SLADEMap/MapObject/MapLine.h"
 #include "SLADEMap/SLADEMap.h"
@@ -61,49 +58,20 @@ DCVAR(Int, linesplit_count, 1, CVar::Flag::Save, "Number of splits per line")
 // -----------------------------------------------------------------------------
 // Beging splitting a line
 // -----------------------------------------------------------------------------
-void LineSplit::begin()
+void LineSplit::begin(std::vector<MapLine*> lines)
 {
-	ItemSelection &selection = context_->selection();
-	lines_ = selection.selectedLines();
-
-	if (lines_.empty()) {
-		// Nothing selected to process -> do not enter line split mode
-		return;
-	}
+	lines_ = lines;
 
 	// Calculate intermediate points for the first time
 	calculate_intermediate_points();
-
-	// Setup state
-	context_->input().setMouseState(Input::MouseState::LineSplit);
-
-	// Setup help text
-	auto key_accept = KeyBind::bind("map_edit_accept").keysAsString();
-	auto key_cancel = KeyBind::bind("map_edit_cancel").keysAsString();
-	auto key_split_inc = KeyBind::bind("me2d_split_reg_inc").keysAsString();
-	auto key_split_dec = KeyBind::bind("me2d_split_reg_dec").keysAsString();
-	context_->setFeatureHelp(
-		{ "Line Splitting",
-			fmt::format("{} = Accept", key_accept),
-			fmt::format("{} = Cancel", key_cancel),
-			fmt::format("{} = Increase split count", key_split_inc),
-			fmt::format("{} = Decrease split count", key_split_dec)
-		});
 }
 
 // -----------------------------------------------------------------------------
-// Ends the line splitting operation and applies changes if [accept] is true
+// Applys the splits and resets the operation
 // -----------------------------------------------------------------------------
-void LineSplit::end(bool apply)
+void LineSplit::apply_splits()
 {
-	if (!apply)
-	{
-		context_->setFeatureHelp({});
-		return;
-	}
-
 	// Split the lines
-	context_->beginUndoRecord("Split lines", true, true, false);
 	for (unsigned line_idx = 0; line_idx < lines_.size(); line_idx++)
 	{
 		MapLine *line = lines_[line_idx];
@@ -116,10 +84,16 @@ void LineSplit::end(bool apply)
 			line = context_->map().splitLine(line, vertex);
 		}
 	}
-	context_->endUndoRecord();
 
-	// Clear feature help text
-	context_->setFeatureHelp({});
+	lines_.clear();
+}
+
+// -----------------------------------------------------------------------------
+// Cancel the line splitting operation
+// -----------------------------------------------------------------------------
+void LineSplit::cancel()
+{
+	lines_.clear();
 }
 
 

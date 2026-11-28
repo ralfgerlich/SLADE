@@ -29,7 +29,6 @@ public:
 		TagSectors,
 		TagThings,
 		MouseLook,
-		LineSplit,
 		DelegateMode
 	};
 

@@ -11,8 +11,9 @@ public:
 
 	explicit LineSplit(MapEditContext& context) : context_(&context) {}
 
-	void begin();
-	void end(bool apply = true);
+	void begin(std::vector<MapLine*> lines);
+	void apply_splits();
+	void cancel();
 
 	void change_splits(int amount);
 

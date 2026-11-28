@@ -2,7 +2,13 @@
 
 #include "ModeController.h"
 
-namespace slade::mapeditor
+namespace slade
+{
+namespace gl::draw2d {
+	class LineSplitView;
+} // namespace gl::draw2d
+
+namespace mapeditor
 {
 class MapEditContext;
 class LineSplit;
@@ -17,9 +23,10 @@ public:
 	void cancel();
 
 	bool onKeyBindPress(string_view name) override;
-	bool onKeyBindRelease(string_view name) override;
-
 private:
 	MapEditContext *context_;
+
+	std::unique_ptr<gl::draw2d::LineSplitView> view_;
 };
 } // namespace slade::mapeditor
+} // namespace slade

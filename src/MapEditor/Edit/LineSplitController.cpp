@@ -31,9 +31,14 @@
 //
 // -----------------------------------------------------------------------------
 #include "Main.h"
+#include "Input.h"
+#include "General/KeyBind.h"
 #include "LineSplitController.h"
 #include "LineSplit.h"
+#include "MapEditor/ItemSelection.h"
 #include "MapEditor/MapEditContext.h"
+#include "MapEditor/Renderer/Renderer.h"
+#include "MapEditor/Renderer/2D/LineSplitView.h"
 
 using namespace slade;
 using namespace mapeditor;
@@ -49,7 +54,8 @@ using namespace mapeditor;
 // LineSplitController constructor
 // -----------------------------------------------------------------------------
 LineSplitController::LineSplitController(MapEditContext &context):
-	context_(&context)
+	context_(&context),
+	view_(std::make_unique<gl::draw2d::LineSplitView>(context))
 {
 }
 
@@ -58,15 +64,47 @@ LineSplitController::LineSplitController(MapEditContext &context):
 // -----------------------------------------------------------------------------
 void LineSplitController::begin()
 {
-	context_->lineSplit().begin();
+	ItemSelection &selection = context_->selection();
+	std::vector<MapLine*> lines = selection.selectedLines();
+
+	if (lines.empty()) {
+		// Nothing selected to process -> do not enter line split mode
+		return;
+	}
+	context_->lineSplit().begin(lines);
+
+	// Setup state
+	context_->input().setMouseModeDelegate(this);
+	context_->renderer().setModeView(view_.get());
+
+	// Setup help text
+	auto key_accept = KeyBind::bind("map_edit_accept").keysAsString();
+	auto key_cancel = KeyBind::bind("map_edit_cancel").keysAsString();
+	auto key_split_inc = KeyBind::bind("me2d_split_reg_inc").keysAsString();
+	auto key_split_dec = KeyBind::bind("me2d_split_reg_dec").keysAsString();
+	context_->setFeatureHelp(
+		{ "Line Splitting",
+			fmt::format("{} = Accept", key_accept),
+			fmt::format("{} = Cancel", key_cancel),
+			fmt::format("{} = Increase split count", key_split_inc),
+			fmt::format("{} = Decrease split count", key_split_dec)
+		});
 }
 
 // -----------------------------------------------------------------------------
-// Apply operation
+// Apply the splits
 // -----------------------------------------------------------------------------
 void LineSplitController::apply()
 {
-	context_->lineSplit().end();
+	context_->beginUndoRecord("Split lines", true, true, false);
+	context_->lineSplit().apply_splits();
+	context_->endUndoRecord();
+
+	context_->renderer().clearModeView();
+
+	// Clear feature help text
+	context_->setFeatureHelp({});
+
 }
 
 // -----------------------------------------------------------------------------
@@ -74,7 +112,12 @@ void LineSplitController::apply()
 // -----------------------------------------------------------------------------
 void LineSplitController::cancel()
 {
-	context_->lineSplit().end(false);
+	context_->lineSplit().cancel();
+
+	context_->renderer().clearModeView();
+
+	// Clear feature help text
+	context_->setFeatureHelp({});
 }
 
 // -----------------------------------------------------------------------------
@@ -82,13 +125,31 @@ void LineSplitController::cancel()
 // -----------------------------------------------------------------------------
 bool LineSplitController::onKeyBindPress(string_view name)
 {
-	return ModeController::onKeyBindPress(name);
-}
+	// Accept line draw
+	if (name == "map_edit_accept")
+	{
+		context_->input().setMouseState(Input::MouseState::Normal);
+		apply();
+	}
 
-// -----------------------------------------------------------------------------
-// Handle key release
-// -----------------------------------------------------------------------------
-bool LineSplitController::onKeyBindRelease(string_view name)
-{
-	return ModeController::onKeyBindRelease(name);
+	// Cancel line draw
+	else if (name == "map_edit_cancel")
+	{
+		context_->input().setMouseState(Input::MouseState::Normal);
+		cancel();
+	}
+
+	// Increase line split count
+	else if (name == "me2d_split_reg_inc")
+	{
+		context_->lineSplit().change_splits(1);
+	}
+
+	// Decrease line split count
+	else if (name == "me2d_split_reg_dec")
+	{
+		context_->lineSplit().change_splits(-1);
+	}
+
+	return ModeController::onKeyBindPress(name);
 }
