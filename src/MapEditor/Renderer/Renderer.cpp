@@ -34,6 +34,7 @@
 #include "Renderer.h"
 #include "2D/MapRenderer2D.h"
 #include "3D/MapRenderer3D.h"
+#include "2D/ModeView.h"
 #include "App.h"
 #include "General/Clipboard.h"
 #include "General/ColourConfiguration.h"
@@ -1174,6 +1175,10 @@ void Renderer::drawMap2d(draw2d::Context& dc, bool focused) const
 	// Draw object edit objects if needed
 	if (mouse_state == Input::MouseState::ObjectEdit)
 		drawObjectEdit(dc);
+	
+	// Draw using the mode view if set
+	if (mode_view_)
+		mode_view_->draw(dc);
 
 	// Draw sectorbuilder test stuff
 	// sbuilder.drawResult();

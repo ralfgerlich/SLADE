@@ -15,6 +15,7 @@ namespace gl
 	namespace draw2d
 	{
 		struct Context;
+		class ModeView;
 	}
 } // namespace gl
 
@@ -38,6 +39,8 @@ namespace mapeditor
 		float          uiScale() const { return ui_scale_; }
 		gl::Camera&    camera() const { return *camera_; }
 		void           setUIScale(float scale) { ui_scale_ = scale; }
+		void           setModeView(gl::draw2d::ModeView* view) { mode_view_ = view; }
+		void           clearModeView() { mode_view_ = 0; }
 
 		void forceUpdate(bool update_2d = true, bool update_3d = true) const;
 		void clearTextureCache() const;
@@ -79,6 +82,7 @@ namespace mapeditor
 		unique_ptr<gl::View>      view_screen_;
 		float                     ui_scale_ = 1.0f;
 		unique_ptr<gl::Camera>    camera_;
+		gl::draw2d::ModeView*     mode_view_ = 0;
 
 		// OpenGL
 		unique_ptr<gl::VertexBuffer2D> vb_grid_;
