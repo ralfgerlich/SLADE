@@ -687,7 +687,8 @@ void Input::onKeyBindPress(string_view name)
 	// Send to mode delegate, if any
 	if (mouse_state_ == MouseState::DelegateMode && mouse_mode_delegate_)
 	{
-		mouse_mode_delegate_->onKeyBindPress(name);
+		if (mouse_mode_delegate_->onKeyBindPress(name))
+			return;
 	}
 
 	// Handle keybinds depending on mode
@@ -723,7 +724,8 @@ void Input::onKeyBindRelease(string_view name)
 	// Send to mode delegate, if any
 	if (mouse_state_ == MouseState::DelegateMode && mouse_mode_delegate_)
 	{
-		mouse_mode_delegate_->onKeyBindRelease(name);
+		if (mouse_mode_delegate_->onKeyBindRelease(name))
+			return;
 	}
 }
 

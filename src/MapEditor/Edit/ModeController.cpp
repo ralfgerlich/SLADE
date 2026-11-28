@@ -6,7 +6,7 @@
 //
 // Email:       sirjuddington@gmail.com
 // Web:         http://slade.mancubus.net
-// Filename:    LineSplit.cpp
+// Filename:    ModeController.cpp
 // Description: Map Editor mode controller abstract base class
 //
 // This program is free software; you can redistribute it and/or modify it
@@ -50,7 +50,7 @@ using namespace mapeditor;
 // -----------------------------------------------------------------------------
 bool ModeController::mouseMove(int new_x, int new_y)
 {
-	return false;
+	return false; // Do not skip this event
 }
 
 // -----------------------------------------------------------------------------
@@ -58,7 +58,7 @@ bool ModeController::mouseMove(int new_x, int new_y)
 // -----------------------------------------------------------------------------
 bool ModeController::mouseDown(Input::MouseButton button, int x, int y, bool double_click)
 {
-	return false;
+	return false; // Do not skip this event
 }
 
 // -----------------------------------------------------------------------------
@@ -66,19 +66,21 @@ bool ModeController::mouseDown(Input::MouseButton button, int x, int y, bool dou
 // -----------------------------------------------------------------------------
 bool ModeController::mouseUp(Input::MouseButton button)
 {
-	return false;
+	return false; // Do not skip this event
 }
 
 // -----------------------------------------------------------------------------
 // Handle key press
 // -----------------------------------------------------------------------------
-void ModeController::onKeyBindPress(string_view name)
+bool ModeController::onKeyBindPress(string_view name)
 {
+	return false; // Do not skip this event
 }
 
 // -----------------------------------------------------------------------------
 // Handle key release
 // -----------------------------------------------------------------------------
-void ModeController::onKeyBindRelease(string_view name)
+bool ModeController::onKeyBindRelease(string_view name)
 {
+	return false; // Do not skip this event
 }
