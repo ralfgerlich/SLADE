@@ -50,6 +50,7 @@
 #include "MapEditor/UI/MapCanvas.h"
 #include "MapEditor/UI/MapEditorWindow.h"
 #include "MapEditor/UI/ObjectEditPanel.h"
+#include "ModeController.h"
 #include "MoveObjects.h"
 #include "ObjectEdit.h"
 #include "OpenGL/Camera.h"
@@ -238,6 +239,13 @@ bool Input::mouseMove(int new_x, int new_y)
 	if (mouse_state_ == MouseState::LineDraw && context_->lineDraw().state() == LineDraw::State::ShapeEdge)
 		context_->lineDraw().updateShape(mouse_pos_map_);
 
+	// Send to mode delegate, if any
+	if (mouse_state_ == MouseState::DelegateMode && mouse_mode_delegate_)
+	{
+		if (!mouse_mode_delegate_->mouseMove(new_x, new_y))
+			return false;
+	}
+
 	return true;
 }
 
@@ -273,6 +281,7 @@ bool Input::mouseDown(MouseButton button, int x, int y, bool double_click)
 
 		return false;
 	}
+
 
 	// Left button
 	if (button == Left)
@@ -374,6 +383,13 @@ bool Input::mouseDown(MouseButton button, int x, int y, bool double_click)
 				}
 			}
 		}
+
+		// Send to mode delegate, if any
+		else if (mouse_state_ == MouseState::DelegateMode && mouse_mode_delegate_)
+		{
+			if (mouse_mode_delegate_->mouseDown(button, x, y, double_click))
+				return true;
+		}
 	}
 
 	// Right button
@@ -417,6 +433,13 @@ bool Input::mouseDown(MouseButton button, int x, int y, bool double_click)
 			// Begin move if something is selected/hilighted
 			if (context_->selection().hasHilightOrSelection())
 				mouse_drag_ = DragType::Move;
+		}
+
+		// Send to mode delegate, if any
+		else if (mouse_state_ == MouseState::DelegateMode && mouse_mode_delegate_)
+		{
+			if (mouse_mode_delegate_->mouseDown(button, x, y, double_click))
+				return true;
 		}
 	}
 
@@ -468,6 +491,13 @@ bool Input::mouseUp(MouseButton button)
 		// If we're in object edit mode
 		if (mouse_state_ == MouseState::ObjectEdit)
 			context_->objectEdit().group().resetPositions();
+
+		// Send to mode delegate, if any
+		if (mouse_state_ == MouseState::DelegateMode && mouse_mode_delegate_)
+		{
+			if (mouse_mode_delegate_->mouseUp(button))
+				return true;
+		}
 	}
 
 	// Right button
@@ -495,6 +525,13 @@ bool Input::mouseUp(MouseButton button)
 
 		else if (mouse_state_ == MouseState::Normal)
 			mapeditor::openContextMenu();
+
+		// Send to mode delegate, if any
+		else if (mouse_state_ == MouseState::DelegateMode && mouse_mode_delegate_)
+		{
+			if (mouse_mode_delegate_->mouseUp(button))
+				return true;
+		}
 	}
 
 	// Any other mouse button (let keybind system handle it)
@@ -647,6 +684,12 @@ void Input::onKeyBindPress(string_view name)
 			return;
 	}
 
+	// Send to mode delegate, if any
+	if (mouse_state_ == MouseState::DelegateMode && mouse_mode_delegate_)
+	{
+		mouse_mode_delegate_->onKeyBindPress(name);
+	}
+
 	// Handle keybinds depending on mode
 	if (context_->editMode() == Mode::Visual)
 		handleKeyBind3d(name);
@@ -675,6 +718,12 @@ void Input::onKeyBindRelease(string_view name)
 		mouse_state_ = MouseState::Normal;
 		context_->endUndoRecord(true);
 		context_->selection().updateHilight(mouse_pos_map_, context_->renderer().view().scale().x);
+	}
+
+	// Send to mode delegate, if any
+	if (mouse_state_ == MouseState::DelegateMode && mouse_mode_delegate_)
+	{
+		mouse_mode_delegate_->onKeyBindRelease(name);
 	}
 }
 

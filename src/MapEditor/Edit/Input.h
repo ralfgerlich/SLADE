@@ -9,6 +9,7 @@ class wxMouseEvent;
 namespace slade::mapeditor
 {
 class MapEditContext;
+class ModeController;
 }
 
 namespace slade::mapeditor
@@ -28,7 +29,8 @@ public:
 		TagSectors,
 		TagThings,
 		MouseLook,
-		LineSplit
+		LineSplit,
+		DelegateMode
 	};
 
 	enum class DragType
@@ -61,7 +63,14 @@ public:
 	bool       altDown() const { return alt_down_; }
 
 	// Mouse handling
-	void setMouseState(MouseState state) { mouse_state_ = state; }
+	void setMouseState(MouseState state) {
+		mouse_state_ = state;
+		mouse_mode_delegate_ = 0;
+	}
+	void setMouseModeDelegate(ModeController *delegate) {
+		setMouseState(MouseState::DelegateMode);
+		mouse_mode_delegate_ = delegate;
+	}
 	void setMousePos(const Vec2i& pos);
 	bool mouseMove(int new_x, int new_y);
 	bool mouseDown(MouseButton button, int x, int y, bool double_click = false);
@@ -95,16 +104,17 @@ private:
 	MapEditContext* context_ = nullptr;
 
 	// Mouse
-	MouseState mouse_state_          = MouseState::Normal;
-	bool       mouse_button_down_[5] = { false, false, false, false, false };
-	Vec2i      mouse_pos_            = { 0, 0 };
-	Vec2d      mouse_pos_map_        = { 0, 0 };
-	Vec2i      mouse_down_pos_       = { -1, -1 };
-	Vec2d      mouse_down_pos_map_   = { -1, -1 };
-	DragType   mouse_drag_           = DragType::None;
-	double     mouse_wheel_accum_    = 0;
-	bool       panning_              = false;
-	bool       block_mouse_drag_     = false;
+	MouseState      mouse_state_          = MouseState::Normal;
+	ModeController *mouse_mode_delegate_  = 0;
+	bool            mouse_button_down_[5] = { false, false, false, false, false };
+	Vec2i           mouse_pos_            = { 0, 0 };
+	Vec2d           mouse_pos_map_        = { 0, 0 };
+	Vec2i           mouse_down_pos_       = { -1, -1 };
+	Vec2d           mouse_down_pos_map_   = { -1, -1 };
+	DragType        mouse_drag_           = DragType::None;
+	double          mouse_wheel_accum_    = 0;
+	bool            panning_              = false;
+	bool            block_mouse_drag_     = false;
 
 	// Keyboard
 	bool shift_down_ = false;
