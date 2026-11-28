@@ -841,27 +841,6 @@ void Renderer::drawLineDrawLines(draw2d::Context& dc, bool snap_nearest_vertex) 
 }
 
 // -----------------------------------------------------------------------------
-// Draws current line splitting points
-// -----------------------------------------------------------------------------
-void Renderer::drawLineSplitPoints(draw2d::Context& dc) const
-{
-	LineSplit& line_split = context_->lineSplit();
-
-	auto &intermediate_points = line_split.intermediate_points();
-
-	for (auto &points: intermediate_points)
-	{
-		dc.setColourFromConfig(ccfg::MapEditor::LineSplit);
-
-		// Draw points
-		auto          ps_type = map2d_vertex_round ? PointSpriteType::Circle : PointSpriteType::Textured;
-		dc.pointsprite_type   = ps_type;
-		dc.pointsprite_radius = map2d_vertex_size / view_->scale(true).x;
-		dc.drawPointSprites(points);
-	}
-}
-
-// -----------------------------------------------------------------------------
 // Draws lines currently being pasted
 // -----------------------------------------------------------------------------
 void Renderer::drawPasteLines(draw2d::Context& dc) const
@@ -1167,10 +1146,6 @@ void Renderer::drawMap2d(draw2d::Context& dc, bool focused) const
 	// Draw line drawing lines if needed
 	if (mouse_state == Input::MouseState::LineDraw)
 		drawLineDrawLines(dc, context_->input().shiftDown());
-	
-	// Draw line splitting points if needed
-	if (mouse_state == Input::MouseState::LineSplit)
-		drawLineSplitPoints(dc);
 
 	// Draw object edit objects if needed
 	if (mouse_state == Input::MouseState::ObjectEdit)

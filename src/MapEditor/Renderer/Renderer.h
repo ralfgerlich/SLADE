@@ -117,7 +117,6 @@ namespace mapeditor
 		void drawThingQuickAngleLines(gl::draw2d::Context& dc) const;
 		void drawLineLength(gl::draw2d::Context& dc, const Vec2d& p1, const Vec2d& p2) const;
 		void drawLineDrawLines(gl::draw2d::Context& dc, bool snap_nearest_vertex) const;
-		void drawLineSplitPoints(gl::draw2d::Context& dc) const;
 		void drawPasteLines(gl::draw2d::Context& dc) const;
 		void drawObjectEdit(gl::draw2d::Context& dc) const;
 		void drawMap2d(gl::draw2d::Context& dc, bool focused) const;
